@@ -19,7 +19,12 @@ type Runner func(MainFunc) cli.ActionFunc
 
 //
 func Main(main MainFunc, name, usage string) {
-	servicer.Main(run(main), name, usage)
+	config := func(app *cli.App) cli.ActionFunc {
+		app.Name = name
+		app.Usage = usage
+		return run(main)
+	}
+	servicer.Main(config)
 }
 
 //

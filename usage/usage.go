@@ -24,6 +24,13 @@ func Error(ctx *cli.Context, err error, isSubcommand bool) error {
 //
 func Trapper(action cli.ActionFunc) cli.ActionFunc {
 	started := time.Now()
+	if action == nil {
+		action = func(ctx *cli.Context) error {
+			log.Println("WARNING: nil Trapper ActionFunc")
+			return nil
+		}
+	}
+
 	return func(ctx *cli.Context) (err error) {
 		defer func() {
 			if r := recover(); r != nil {

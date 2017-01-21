@@ -13,11 +13,20 @@ import (
 )
 
 //
-func Main(action cli.ActionFunc, appName, appUsage string) {
+type Config func(*cli.App) error
+
+//
+type ConfigFunc func(*cli.App) cli.ActionFunc
+
+//
+func ErrorFunc(err error) cli.ActionFunc {
+	return func(ctx *cli.Context) error { return err }
+}
+
+//
+func Main(configure ConfigFunc) {
 	settings.Version = MAJOR + "." + VERSION
 	app := cli.NewApp()
-	app.Name = appName
-	app.Usage = appUsage
 	app.ArgsUsage = ""
 	app.Version = settings.Version
 	app.EnableBashCompletion = true
@@ -172,6 +181,8 @@ func Main(action cli.ActionFunc, appName, appUsage string) {
 		return nil
 	}
 
-	app.Action = usage.Trapper(debugger(action))
+	app.Action = usage.Trapper(debugger(configure(app)))
+
+	app.Version = app.Version + "." + settings.Version
 	app.Run(os.Args)
 }

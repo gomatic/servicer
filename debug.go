@@ -12,6 +12,12 @@ import (
 
 //
 func debugger(action cli.ActionFunc) cli.ActionFunc {
+	if action == nil {
+		action = func(ctx *cli.Context) error {
+			log.Println("WARNING: nil debugger ActionFunc")
+			return nil
+		}
+	}
 	return func(ctx *cli.Context) error {
 		settings := ctx.App.Metadata["settings"].(Settings)
 
