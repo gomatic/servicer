@@ -96,6 +96,11 @@ func Main(action cli.ActionFunc, appName, appUsage string) {
 			Destination: &settings.Output.Verbose,
 		},
 		cli.BoolFlag{
+			Name:        "mock, M",
+			Usage:       "Return mock JSON.",
+			Destination: &settings.Output.Mocking,
+		},
+		cli.BoolFlag{
 			Name:        "debug, D",
 			Usage:       "Enable debugging.",
 			EnvVar:      "DEBUG",

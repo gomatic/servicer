@@ -39,6 +39,7 @@ type Settings struct {
 	}
 
 	Output struct {
+		Mocking   bool
 		Debugging bool
 		Verbose   bool
 	}
