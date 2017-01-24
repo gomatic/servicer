@@ -7,6 +7,7 @@ import (
 
 //
 const MAJOR = "1"
+
 var VERSION = "0"
 
 //
@@ -30,6 +31,7 @@ type Settings struct {
 		Namespace, Domain string
 	}
 
+	Name      string
 	Container string
 	Version   string
 

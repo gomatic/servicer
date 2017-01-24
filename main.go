@@ -10,6 +10,7 @@ import (
 
 	"github.com/gomatic/servicer/usage"
 	"github.com/urfave/cli"
+	"path"
 )
 
 //
@@ -76,6 +77,12 @@ func Main(configure ConfigFunc) {
 			EnvVar:      "SVC_NAMESPACE",
 			Value:       "dev",
 			Destination: &settings.Dns.Namespace,
+		},
+		cli.StringFlag{
+			Name:        "name",
+			Usage:       "Server name.",
+			Value:       path.Base(os.Args[0]),
+			Destination: &settings.Name,
 		},
 		cli.StringFlag{
 			Name:        "domain",
