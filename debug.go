@@ -36,9 +36,11 @@ func debugger(action cli.ActionFunc) cli.ActionFunc {
 		expvar.Publish("settings", expvar.Func(func() interface{} { return settings }))
 		go func() {
 			srv := &http.Server{
-				Addr:         settings.Bind + ":" + port,
-				ReadTimeout:  settings.Timeout.Read,
-				WriteTimeout: settings.Timeout.Write,
+				Addr:           settings.Bind + ":" + port,
+				Handler:        http.DefaultServeMux,
+				ReadTimeout:    settings.Timeout.Read,
+				WriteTimeout:   settings.Timeout.Write,
+				MaxHeaderBytes: 1 << 20,
 			}
 			log.Println("debugging on: " + srv.Addr)
 			log.Println(srv.ListenAndServe())
