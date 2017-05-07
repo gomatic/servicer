@@ -14,18 +14,18 @@ import (
 	"github.com/urfave/cli"
 )
 
-//
+// Config type.
 type Config func(*cli.App) error
 
-//
+// ConfigFunc type.
 type ConfigFunc func(*cli.App) cli.ActionFunc
 
-//
+// ErrorFunc type.
 func ErrorFunc(err error) cli.ActionFunc {
 	return func(ctx *cli.Context) error { return err }
 }
 
-//
+// Main entry-point for servicers.
 func Main(configure ConfigFunc) {
 	settings.Version = build.Version.String()
 	app := cli.NewApp()

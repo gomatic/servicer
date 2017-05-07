@@ -11,13 +11,13 @@ import (
 	"google.golang.org/grpc"
 )
 
-//
+// MainFunc type.
 type MainFunc func(context.Context, servicer.Settings, *grpc.Server) (*runtime.ServeMux, error)
 
-//
+// Runner type.
 type Runner func(MainFunc) cli.ActionFunc
 
-//
+// Main client entry-point.
 func Main(main MainFunc, name, usage string) {
 	config := func(app *cli.App) cli.ActionFunc {
 		app.Name = name

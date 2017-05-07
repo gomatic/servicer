@@ -16,7 +16,7 @@ func (h host) String() string {
 	return fmt.Sprintf("%s:%d", h.Addr, h.Port)
 }
 
-//
+// Settings for the servicers.
 type Settings struct {
 	Bind string
 	Api  host
