@@ -1,13 +1,13 @@
 package server
 
 import (
+	"context"
 	"net"
 	"net/http"
 
 	"github.com/gomatic/servicer"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/urfave/cli"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 

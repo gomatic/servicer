@@ -5,12 +5,13 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path"
 	"strings"
 	"time"
 
-	"github.com/gomatic/servicer/usage"
+	"github.com/gomatic/go-vbuild"
+	"github.com/gomatic/usage"
 	"github.com/urfave/cli"
-	"path"
 )
 
 //
@@ -26,7 +27,7 @@ func ErrorFunc(err error) cli.ActionFunc {
 
 //
 func Main(configure ConfigFunc) {
-	settings.Version = MAJOR + "." + VERSION
+	settings.Version = build.Version.String()
 	app := cli.NewApp()
 	app.ArgsUsage = ""
 	app.Version = settings.Version

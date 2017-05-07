@@ -6,11 +6,6 @@ import (
 )
 
 //
-const MAJOR = "1"
-
-var VERSION = "0"
-
-//
 type host struct {
 	Port int
 	Addr string
