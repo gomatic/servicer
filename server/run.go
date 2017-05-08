@@ -2,8 +2,10 @@ package server
 
 import (
 	"context"
+	"log"
 	"net"
 	"net/http"
+	"strings"
 
 	"github.com/gomatic/servicer"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -18,17 +20,29 @@ type MainFunc func(context.Context, servicer.Settings, *grpc.Server) (*runtime.S
 type Runner func(MainFunc) cli.ActionFunc
 
 // Main client entry-point.
-func Main(main MainFunc, name, usage string) {
+func Main(main MainFunc, name, usage string, api []byte) {
 	config := func(app *cli.App) cli.ActionFunc {
 		app.Name = name
 		app.Usage = usage
-		return run(main)
+		return run(main, api)
 	}
 	servicer.Main(config)
 }
 
 //
-func run(main MainFunc) cli.ActionFunc {
+func serveAPI(api []byte) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if !strings.HasSuffix(r.URL.Path, "/model.json") {
+			log.Printf("Not Found: %s", r.URL.Path)
+			http.NotFound(w, r)
+			return
+		}
+		w.Write(api)
+	}
+}
+
+//
+func run(main MainFunc, api []byte) cli.ActionFunc {
 	return func(app *cli.Context) error {
 
 		settings := app.App.Metadata["settings"].(servicer.Settings)
@@ -44,10 +58,14 @@ func run(main MainFunc) cli.ActionFunc {
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
-		mux, err := main(ctx, settings, rpcServer)
+		rmux, err := main(ctx, settings, rpcServer)
 		if err != nil {
 			return err
 		}
+
+		mux := http.NewServeMux()
+		mux.HandleFunc("/api/", serveAPI(api))
+		mux.Handle("/", rmux)
 
 		go rpcServer.Serve(rpcListener)
 
