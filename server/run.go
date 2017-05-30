@@ -2,16 +2,20 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"strings"
 
+	"github.com/gomatic/go-vbuild"
 	"github.com/gomatic/servicer"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/urfave/cli"
 	"google.golang.org/grpc"
 )
+
+var version = build.Version.String()
 
 // MainFunc type.
 type MainFunc func(context.Context, servicer.Settings, *grpc.Server) (*runtime.ServeMux, error)
@@ -42,6 +46,13 @@ func serveAPI(api []byte) func(w http.ResponseWriter, r *http.Request) {
 }
 
 //
+func ok(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "%s\n", version)
+	return
+}
+
+//
 func run(main MainFunc, api []byte) cli.ActionFunc {
 	return func(app *cli.Context) error {
 
@@ -64,6 +75,9 @@ func run(main MainFunc, api []byte) cli.ActionFunc {
 		}
 
 		mux := http.NewServeMux()
+		mux.HandleFunc("/ok", ok)
+		mux.HandleFunc("/health", ok)
+		mux.HandleFunc("/health/", ok)
 		mux.HandleFunc("/api/", serveAPI(api))
 		mux.Handle("/", rmux)
 
