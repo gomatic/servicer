@@ -9,4 +9,4 @@ A tiny framework for launching various components of micro-service based applica
 
 # example
 
-See [gomatic/service-example](//github.com/gomatic/service-example).
+See [gomatic/service-example](//github.com/gomatic/service-example) and [gomatic/gateway](//github.com/gomatic/gateway)  
