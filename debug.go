@@ -79,7 +79,7 @@ func tokenizer(message string) func(w http.ResponseWriter, req *http.Request) {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "%s%s", message, tokenString)
+		fmt.Fprintf(w, "%s%s\n", message, tokenString)
 		return
 	}
 
